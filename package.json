@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/fullstacktogether/meeting_app_backend/issues"
   },
-  "homepage": "https://github.com/fullstacktogether/meeting_app_backend#readme"
+  "homepage": "https://github.com/fullstacktogether/meeting_app_backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.17"
+  }
 }
