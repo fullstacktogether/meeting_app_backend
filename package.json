@@ -1,0 +1,19 @@
+{
+  "name": "meeting_app_backend",
+  "version": "1.0.0",
+  "description": "Meeting app backend with node.js and mongodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fullstacktogether/meeting_app_backend.git"
+  },
+  "author": "BerkkanB, rbt15",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fullstacktogether/meeting_app_backend/issues"
+  },
+  "homepage": "https://github.com/fullstacktogether/meeting_app_backend#readme"
+}
