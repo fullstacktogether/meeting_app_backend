@@ -1,13 +1,22 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+const routes = require("./routes");
 require("./database/dbConnection");
-const authRoute = require("./routes/auth");
 
 app.use(express.json());
-app.use("/api/auth", authRoute);
 
-app.get("/", (req, res) => {
-  res.json({ msg: "Welcome" });
+//Enabe Cors
+app.use(cors());
+app.options("*", cors());
+
+// Routes
+app.use("/api", routes);
+
+// Error Middleware
+app.use((err, req, res, next) => {
+  if (!err.statusCode) err.statusCode = 500;
+  res.status(err.statusCode).send({ error: err.message });
 });
 
 const PORT = 3000;

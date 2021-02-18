@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/fullstacktogether/meeting_app_backend#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "http-errors": "^1.7.2",
     "mongoose": "^5.11.15",
     "validator": "^13.5.2"
   },
