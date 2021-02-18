@@ -2,7 +2,7 @@ const router = require("express").Router();
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
-
+const authMiddleware = require("../middleware/auth-mw")
 router.get("/", (req, res) => {
   res.send("Auth");
 });
@@ -34,5 +34,15 @@ router.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get("/me",authMiddleware,(req,res,next)=>{
+    res.json(req.user)
+});
+
+
+
+
+
+
 
 module.exports = router;
