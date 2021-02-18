@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const routes = require("./routes");
+const errorHandler = require("./middleware/error-handler");
 require("./database/dbConnection");
 
 app.use(express.json());
@@ -14,10 +15,7 @@ app.options("*", cors());
 app.use("/api", routes);
 
 // Error Middleware
-app.use((err, req, res, next) => {
-  if (!err.statusCode) err.statusCode = 500;
-  res.status(err.statusCode).send({ error: err.message });
-});
+app.use(errorHandler);
 
 const PORT = 3000;
 app.listen(PORT, () =>
