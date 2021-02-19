@@ -39,10 +39,14 @@ router.get("/me",authMiddleware,(req,res,next)=>{
     res.json(req.user)
 });
 
-router.patch("/me",authMiddleware,async(req,res)=>{
-  const userId=req.user._id
-  const updatedUser = await User.findByIdAndUpdate(userId,{username:req.body.username},{new:true})
-  res.json(updatedUser)
+router.patch("/me",authMiddleware,async(req,res,next)=>{
+  try {
+    const userId=req.user._id
+    const updatedUser = await User.findByIdAndUpdate(userId,req.body,{new:true,runValidators:true})
+    res.json(updatedUser)
+  } catch (error) {
+    next(error)
+  }
 })
 
 
