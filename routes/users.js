@@ -53,4 +53,40 @@ router.post("/follow", authMiddleware, async (req, res, next) => {
   }
 });
 
+router.post("/unfollow", authMiddleware, async (req, res, next) => {
+  try {
+    const sourceId = req.user._id;
+    const targetId = req.body.target_id;
+    //console.log(typeof sourceId, typeof targetId);
+    if (sourceId == targetId) {
+      throw createError.BadRequest("You cannot unfollow yourself");
+    }
+    const query = {
+      _id: sourceId,
+      following: { $elemMatch: { $eq: targetId } },
+    };
+    const update = {
+      $pull: { following: targetId },
+    };
+
+    const updated = await User.updateOne(query, update);
+
+    const secondQuery = {
+      _id: targetId,
+      followers: { $elemMatch: { $eq: sourceId } },
+    };
+    const secondUpdate = {
+      $pull: { followers: sourceId },
+    };
+    const secondUpdated = await User.updateOne(secondQuery, secondUpdate);
+
+    if (!updated || !secondUpdated) {
+      throw createError.BadRequest("Unable to unfollow");
+    }
+    res.send(updated);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
