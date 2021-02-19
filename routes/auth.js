@@ -2,7 +2,7 @@ const router = require("express").Router();
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
-const authMiddleware = require("../middleware/auth-mw")
+const authMiddleware = require("../middleware/auth-mw");
 router.get("/", (req, res) => {
   res.send("Auth");
 });
@@ -35,22 +35,27 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.get("/me",authMiddleware,(req,res,next)=>{
-    res.json(req.user)
+router.get("/me", authMiddleware, (req, res, next) => {
+  res.json(req.user);
 });
 
-router.patch("/me",authMiddleware,async(req,res,next)=>{
+router.patch("/me", authMiddleware, async (req, res, next) => {
   try {
-    const userId=req.user._id
-    const updatedUser = await User.findByIdAndUpdate(userId,req.body,{new:true,runValidators:true})
-    res.json(updatedUser)
+    const userId = req.user._id;
+    const newUsername = req.body.username;
+    if (!newUsername) throw createError.BadRequest("Invalid request body");
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username: newUsername },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.json(updatedUser);
   } catch (error) {
-    next(error)
+    next(error);
   }
-})
-
-
-
-
+});
 
 module.exports = router;
