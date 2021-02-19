@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const validator = require("validator");
 const createError = require("http-errors");
 
-const userSchema = Schema({
+const userSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -47,7 +47,7 @@ const userSchema = Schema({
       ref: "User",
     },
   ],
-});
+},{timestamps:true});
 
 userSchema.pre("save", async function (next) {
   try {
