@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 const createError = require("http-errors");
 
-const userSchema = mongoose.Schema({
+const userSchema = Schema({
   username: {
     type: String,
     required: true,
     trim: true,
-    minlength:3,
-    unique:true
+    minlength: 3,
+    unique: true,
   },
   email: {
     type: String,
@@ -34,6 +35,18 @@ const userSchema = mongoose.Schema({
       }
     },
   },
+  followers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  following: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {

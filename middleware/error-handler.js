@@ -1,6 +1,6 @@
 function errorHandler(err, req, res, next) {
   switch (true) {
-    case err.statusCod != null:
+    case err.statusCode != null:
       return res.status(err.statusCode).json(err);
     case err.name === "ValidationError":
       return res.status(400).json({ message: err.message });
