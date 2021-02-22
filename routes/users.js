@@ -10,7 +10,10 @@ router.get("/:id", authMiddleware, async (req, res, next) => {
     const id = req.params.id;
     if (!mongoose.Types.ObjectId.isValid(id))
       throw createError.BadRequest("Invalid id");
-    const user = await User.findById(id);
+    const user = await User.findById(id)
+      .populate("followers", "username email")
+      .populate("following", "username email")
+      .populate("eventsID", "name");
     res.send(user);
   } catch (error) {
     next(error);
@@ -52,7 +55,7 @@ router.post("/follow", authMiddleware, async (req, res, next) => {
     next(error);
   }
 });
-
+// Unfollow user by id
 router.post("/unfollow", authMiddleware, async (req, res, next) => {
   try {
     const sourceId = req.user._id;

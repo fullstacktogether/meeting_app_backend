@@ -37,8 +37,9 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/me", authMiddleware, async (req, res, next) => {
   const user = await User.findById(req.user._id)
-    .populate("followers", "username, email")
-    .populate("following", "username, email");
+    .populate("followers", "username")
+    .populate("following", "username")
+    .populate("eventsID", "name");
   res.send(user);
 });
 

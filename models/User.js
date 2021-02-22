@@ -4,53 +4,63 @@ const bcrypt = require("bcrypt");
 const validator = require("validator");
 const createError = require("http-errors");
 
-const userSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 3,
-    unique: true,
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 3,
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw createError.BadRequest("Invalid email");
+        }
+      },
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 8,
+      validate(value) {
+        if (
+          !value.match(/\d/) ||
+          !value.match(/[a-zA-Z]/) ||
+          value.length > 16
+        ) {
+          throw createError.BadRequest("Invalid Password");
+        }
+      },
+    },
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    eventsID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    lowercase: true,
-    validate(value) {
-      if (!validator.isEmail(value)) {
-        throw createError.BadRequest("Invalid email");
-      }
-    },
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 8,
-    validate(value) {
-      if (!value.match(/\d/) || !value.match(/[a-zA-Z]/) || value.length > 16) {
-        throw createError.BadRequest("Invalid Password");
-      }
-    },
-  },
-  followers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  following: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  eventsID:[
-    {type:Schema.Types.ObjectId}
-  ]
-},{timestamps:true});
+  { timestamps: true }
+);
 
 userSchema.pre("save", async function (next) {
   try {
