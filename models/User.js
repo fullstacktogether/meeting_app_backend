@@ -47,6 +47,9 @@ const userSchema = new Schema({
       ref: "User",
     },
   ],
+  eventsID:[
+    {type:Schema.Types.ObjectId}
+  ]
 },{timestamps:true});
 
 userSchema.pre("save", async function (next) {

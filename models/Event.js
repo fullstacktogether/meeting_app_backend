@@ -10,7 +10,8 @@ const eventSchema = new Schema({
     location:[{type:String}],
     car:{type:Boolean},
     nop:{type:Number},  //nop:number of participants
-    participants:[{type:Schema.Types.ObjectId}]
+    participants:[{type:Schema.Types.ObjectId}],
+    ispublic:{type:Boolean}
 },{timestamps:true})
 
 module.exports = mongoose.model("Event",eventSchema)
