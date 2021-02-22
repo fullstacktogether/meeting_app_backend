@@ -35,8 +35,11 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.get("/me", authMiddleware, (req, res, next) => {
-  res.json(req.user);
+router.get("/me", authMiddleware, async (req, res, next) => {
+  const user = await User.findById(req.user._id)
+    .populate("followers", "username, email")
+    .populate("following", "username, email");
+  res.send(user);
 });
 
 router.patch("/me", authMiddleware, async (req, res, next) => {
