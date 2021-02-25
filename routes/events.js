@@ -6,6 +6,38 @@ const authMiddleware = require("../middleware/auth-mw");
 router.get("/", (req, res) => {
   res.send("Event");
 });
+
+// Get nearest events
+// Route : api/events/near?long=XXX&lat=XXX (optional)&distance=XXX
+// optinal paramaters: distance
+router.get("/near", async (req, res, next) => {
+  try {
+    const events = await Event.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [
+              parseFloat(req.query.long),
+              parseFloat(req.query.lat),
+            ],
+          },
+          distanceField: "dist.calculated",
+          maxDistance: req.query.distance
+            ? parseFloat(req.query.distance)
+            : 100000,
+          spherical: true,
+        },
+      },
+    ]);
+
+    res.send(events);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 // Create Event
 router.post("/", authMiddleware, async (req, res, next) => {
   try {
