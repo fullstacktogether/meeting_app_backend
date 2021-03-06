@@ -3,6 +3,8 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 const authMiddleware = require("../middleware/auth-mw");
+const upload = require("../middleware/file-upload");
+
 router.get("/", (req, res) => {
   res.send("Auth");
 });
@@ -43,23 +45,36 @@ router.get("/me", authMiddleware, async (req, res, next) => {
   res.send(user);
 });
 
-router.patch("/me", authMiddleware, async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const newUsername = req.body.username;
-    if (!newUsername) throw createError.BadRequest("Invalid request body");
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { username: newUsername },
-      {
-        new: true,
-        runValidators: true,
+// Route : auth/me
+// Method : PATCH
+// Change username or avatar of authenticated user
+router.patch(
+  "/me",
+  [authMiddleware, upload.single("avatar")],
+  async (req, res, next) => {
+    try {
+      const userId = req.user._id;
+      const newUsername = req.body.username;
+      if (newUsername) {
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { username: newUsername },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+        res.json(updatedUser);
       }
-    );
-    res.json(updatedUser);
-  } catch (error) {
-    next(error);
+      const user = await User.findByIdAndUpdate(userId, {
+        avatar_url: req.file.path,
+        new: true,
+      });
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 module.exports = router;

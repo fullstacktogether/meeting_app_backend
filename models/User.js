@@ -40,6 +40,7 @@ const userSchema = new Schema(
         }
       },
     },
+    avatar_url: { type: String },
     followers: [
       {
         type: Schema.Types.ObjectId,
