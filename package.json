@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/fullstacktogether/meeting_app_backend#readme",
   "dependencies": {
+    "@admin-bro/express": "^3.1.0",
+    "@admin-bro/mongoose": "^1.1.0",
+    "admin-bro": "^3.4.0",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -25,6 +28,7 @@
     "mongoose": "^5.11.15",
     "multer": "^1.4.2",
     "path": "^0.12.7",
+    "tslib": "^2.1.0",
     "validator": "^13.5.2"
   },
   "devDependencies": {

@@ -67,9 +67,9 @@ router.patch(
         res.json(updatedUser);
       }
       const user = await User.findByIdAndUpdate(
-        userId, 
-        {avatar_url: req.file.path},
-        {new: true}
+        userId,
+        { avatar_url: req.file.path },
+        { new: true }
       );
       res.json(user);
     } catch (error) {
