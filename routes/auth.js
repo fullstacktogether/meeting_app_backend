@@ -41,7 +41,8 @@ router.get("/me", authMiddleware, async (req, res, next) => {
   const user = await User.findById(req.user._id)
     .populate("followers", "username")
     .populate("following", "username")
-    .populate("eventsID", "name");
+    .populate("eventsID", "name")
+    .populate("groupsID", "name");
   res.send(user);
 });
 
@@ -64,14 +65,15 @@ router.patch(
             runValidators: true,
           }
         );
-        res.json(updatedUser);
+        res.send(updatedUser);
+      } else {
+        const user = await User.findByIdAndUpdate(
+          userId,
+          { avatar_url: req.file.path },
+          { new: true }
+        );
+        res.send(user);
       }
-      const user = await User.findByIdAndUpdate(
-        userId,
-        { avatar_url: req.file.path },
-        { new: true }
-      );
-      res.json(user);
     } catch (error) {
       next(error);
     }

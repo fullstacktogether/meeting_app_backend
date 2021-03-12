@@ -59,6 +59,12 @@ const userSchema = new Schema(
         ref: "Event",
       },
     ],
+    groupsID: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Group",
+      },
+    ],
   },
   { timestamps: true }
 );

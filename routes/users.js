@@ -13,7 +13,8 @@ router.get("/:id", authMiddleware, async (req, res, next) => {
     const user = await User.findById(id)
       .populate("followers", "username email")
       .populate("following", "username email")
-      .populate("eventsID", "name");
+      .populate("eventsID", "name")
+      .populate("groupsID", "name");
     res.send(user);
   } catch (error) {
     next(error);
