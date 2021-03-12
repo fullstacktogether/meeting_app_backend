@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Event = require("../models/Event");
 const User = require("../models/User");
 const authMiddleware = require("../middleware/auth-mw");
+const { uploadEvent } = require("../middleware/file-upload");
 
 router.get("/", (req, res) => {
   res.send("Event");
@@ -68,5 +69,27 @@ router.get("/:id", authMiddleware, async (req, res, next) => {
     next(error);
   }
 });
+
+// PATCH api/events/:id/photos
+// Add cover photo to event
+// TODO make multiple image upload
+router.patch(
+  "/:id/photos",
+  [authMiddleware, uploadEvent.single("cover")],
+  async (req, res, next) => {
+    try {
+      const eventId = req.params.id;
+      const userId = req.user._id;
+      const event = await Event.findByIdAndUpdate(
+        eventId,
+        { cover_url: req.file.path },
+        { new: true }
+      );
+      res.send(event);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

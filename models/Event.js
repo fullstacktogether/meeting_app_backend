@@ -29,6 +29,7 @@ const eventSchema = new Schema(
     nop: { type: Number }, //nop:number of participants
     participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
     ispublic: { type: Boolean },
+    cover_url: { type: String },
   },
   { timestamps: true }
 );

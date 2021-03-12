@@ -11,6 +11,23 @@ const storage = multer.diskStorage({
     cb(null, req.user._id + path.extname(file.originalname));
   },
 });
+
+const storageEvent = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/events");
+  },
+
+  // By default, multer removes file extensions so let's add them back
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      Date.now() +
+        "-" +
+        Math.round(Math.random() * 1e9) +
+        path.extname(file.originalname)
+    );
+  },
+});
 const imageFilter = function (req, file, cb) {
   // Accept images only
   if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
@@ -20,5 +37,7 @@ const imageFilter = function (req, file, cb) {
   cb(null, true);
 };
 const upload = multer({ storage: storage, fileFilter: imageFilter });
+const uploadEvents = multer({ storage: storageEvent, fileFilter: imageFilter });
 
-module.exports = upload;
+exports.uploadAvatar = upload;
+exports.uploadEvent = uploadEvents;

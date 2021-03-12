@@ -79,4 +79,8 @@ router.patch("/:id", authMiddleware, async (req, res, next) => {
   }
 });
 
+// TODO join and leave to group endpoints
+
+// TODO create events for join endpoints
+
 module.exports = router;

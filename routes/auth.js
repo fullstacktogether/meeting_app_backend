@@ -3,7 +3,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 const authMiddleware = require("../middleware/auth-mw");
-const upload = require("../middleware/file-upload");
+const { uploadAvatar } = require("../middleware/file-upload");
 
 router.get("/", (req, res) => {
   res.send("Auth");
@@ -51,7 +51,7 @@ router.get("/me", authMiddleware, async (req, res, next) => {
 // Change username or avatar of authenticated user
 router.patch(
   "/me",
-  [authMiddleware, upload.single("avatar")],
+  [authMiddleware, uploadAvatar.single("avatar")],
   async (req, res, next) => {
     try {
       const userId = req.user._id;
